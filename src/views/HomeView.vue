@@ -15,6 +15,7 @@
         v-for="(result, index) in mapboxSearchResults"
         :key="index"
         class="px-4 py-2 cursor-pointer hover:bg-gray-100 transition"
+        @click="preview(result)"
       >
         {{ result.place_name }}
       </li>
@@ -25,10 +26,25 @@
 <script setup>
 import { ref, onBeforeUnmount } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const queryTimeOut = ref(null)
 const searchQuery = ref('')
 const mapboxSearchResults = ref([])
+const router = useRouter()
+
+const preview = (search) => {
+  const [city, state] = search.place_name.split(',').map((s) => s.trim())
+  router.push({
+    name: 'CityView',
+    params: { city, state },
+    query: {
+      lat: search.geometry.coordinates[1],
+      lon: search.geometry.coordinates[0],
+      preview: true,
+    },
+  })
+}
 
 const getSearchResults = () => {
   clearTimeout(queryTimeOut.value)
