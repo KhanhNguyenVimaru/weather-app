@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="flex flex-col min-h-full">
+  <div id="app" class="flex flex-col min-h-[100vh]">
     <SiteNavigation />
     <RouterView />
   </div>
