@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto max-w-4xl pt-8">
+  <div class="container mx-auto max-w-4xl pt-8 min-h-[80vh]">
     <!-- Ô tìm kiếm -->
     <input
       type="text"
@@ -20,6 +20,18 @@
         {{ result.place_name }}
       </li>
     </ul>
+    <Suspense>
+      <template #default>
+        <MyCityCard />
+      </template>
+      <template #fallback>
+        <div class="flex items-center justify-center h-screen">
+          <div
+            class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-solid"
+          ></div>
+        </div>
+      </template>
+    </Suspense>
   </div>
 </template>
 
@@ -27,6 +39,7 @@
 import { ref, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import MyCityCard from '@/components/MyCityCard.vue'
 
 const queryTimeOut = ref(null)
 const searchQuery = ref('')
@@ -74,4 +87,10 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@media (max-width: 640px) {
+  input {
+    font-size: 1rem;
+  }
+}
+</style>
