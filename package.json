@@ -14,7 +14,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@tailwindcss/vite": "^4.1.12",
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.11.0",
     "bootstrap-icons": "^1.13.1",
     "uid": "^2.0.2",

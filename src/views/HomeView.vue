@@ -3,7 +3,7 @@
     <!-- Ô tìm kiếm -->
     <input
       type="text"
-      class="w-full px-4 py-2 bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none focus:ring-0 transition duration-200 ease-in-out placeholder-gray-400 text-gray-700"
+      class="w-full px-4 py-2 bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none focus:ring-0 transition duration-200 ease-in-out placeholder-gray-400 text-gray-700 my-6"
       placeholder="Search for a city..."
       v-model="searchQuery"
       @input="getSearchResults"
@@ -36,10 +36,30 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import MyCityCard from '@/components/MyCityCard.vue'
+import { notification } from 'ant-design-vue'
+
+const MyCityCard = defineAsyncComponent({
+  loader: () => import('@/components/MyCityCard.vue'),
+  delay: 2000,
+  timeout: 10000,
+  onError(error, retry, fail, attempts) {
+    if (attempts <= 3) {
+      retry()
+    } else {
+      fail()
+    }
+  },
+})
+
+const ShowNotifyFailed = () => {
+  notification.error({
+    message: 'Error',
+    description: 'Load weather data failed',
+  })
+}
 
 const queryTimeOut = ref(null)
 const searchQuery = ref('')
@@ -74,23 +94,15 @@ const getSearchResults = () => {
       } catch (error) {
         console.error('Mapbox API error:', error)
         mapboxSearchResults.value = []
+        ShowNotifyFailed()
       }
-    }, 300)
+    }, 200)
   } else {
     mapboxSearchResults.value = []
   }
 }
 
-// clear timeout khi component unmount
 onBeforeUnmount(() => {
   if (queryTimeOut.value) clearTimeout(queryTimeOut.value)
 })
 </script>
-
-<style scoped lang="scss">
-@media (max-width: 640px) {
-  input {
-    font-size: 1rem;
-  }
-}
-</style>

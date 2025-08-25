@@ -9,7 +9,9 @@
       v-if="route.query.preview"
       class="text-black p-4 bg-weather-secondary w-full text-center bg-gray-50"
     >
-      <p>You are currently previewing this city, click the "+" icon to start tracking this city.</p>
+      <p style="margin-bottom: 0">
+        You are currently previewing this city, click the "+" icon to start tracking this city.
+      </p>
     </div>
 
     <!-- Weather Overview -->
@@ -30,7 +32,7 @@
         }}
       </p>
 
-      <p class="mb-8 text-gray-50" style="font-size: 84px">
+      <p class="mb-8 text-gray-50" style="font-size: 85px; margin: 2.8rem 0 !important">
         {{ Math.round(weatherData.current.temp) }}&deg;
       </p>
       <p class="text-gray-50">Feels like {{ Math.round(weatherData.current.feels_like) }}&deg;</p>
@@ -48,11 +50,12 @@
         <p>Wind: {{ weatherData.current.wind_speed }} m/s</p>
       </div>
     </div>
+    <hr class="border-gray-500" style="width: 50%; margin: 2rem auto" />
 
     <!-- Hourly Weather -->
-    <div v-if="weatherData" class="max-w-screen-md w-full py-12">
+    <div v-if="weatherData" class="max-w-screen-md w-full py-12 pt-6">
       <div class="mx-8 text-white">
-        <h2 class="mb-4">Hourly Weather</h2>
+        <h2 style="margin-bottom: 24px">Hourly Weather</h2>
         <div class="flex gap-10 overflow-x-scroll hide-scrollbar">
           <div
             v-for="hourData in weatherData.hourly.slice(0, 12)"
@@ -76,11 +79,12 @@
         </div>
       </div>
     </div>
+    <hr class="border-gray-500" style="width: 50%; margin: 2rem auto" />
 
     <!-- Weekly Weather -->
-    <div v-if="weatherData" class="max-w-screen-md w-full py-12">
+    <div v-if="weatherData" class="max-w-screen-md w-full py-12 pt-6">
       <div class="mx-8 text-white">
-        <h2 class="mb-4">7 Day Forecast</h2>
+        <h2 style="margin-bottom: 24px">7 Day Forecast</h2>
         <div v-for="day in weatherData.daily" :key="day.dt" class="flex items-center">
           <p class="flex-1">
             {{
@@ -115,7 +119,7 @@ const weatherData = ref(null)
 const loading = ref(true)
 const errorMsg = ref(null)
 
-const API_KEY = '19af39af5484e0dda5f33053e3c0a1c6' // thay bằng key Pro của bạn
+const API_KEY = '19af39af5484e0dda5f33053e3c0a1c6'
 
 const getWeatherData = async () => {
   try {

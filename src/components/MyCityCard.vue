@@ -1,12 +1,13 @@
 <template>
-  <h2 class="mt-6 ml-7 text-lg">The weather at your place</h2>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 pt-4" v-if="weatherData">
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 pt-4 mt-8"
+    v-if="weatherData"
+  >
     <!-- Card 1: Location & Weather -->
     <div
       class="bg-white text-black border-2 border-gray-300 rounded-xl p-5 transition duration-300 hover:shadow-lg hover:border-gray-500 hover:scale-105"
     >
-      <p v-if="weatherData">
+      <p v-if="weatherData" class="mb-3">
         <span class="font-semibold text-lg"
           >{{ weatherData.name }}, {{ weatherData.sys.country }}</span
         >
@@ -42,7 +43,7 @@
       class="bg-white text-black border-2 border-gray-300 rounded-xl p-5 transition duration-300 hover:shadow-lg hover:border-gray-500 hover:scale-105"
     >
       <h2 class="text-lg font-bold mb-3">Atmosphere</h2>
-      <p>Pressure: {{ weatherData?.main.pressure }} hPa</p>
+      <!-- <p>Pressure: {{ weatherData?.main.pressure }} hPa</p> -->
       <p>Humidity: {{ weatherData?.main.humidity }}%</p>
       <p>Clouds: {{ weatherData?.clouds.all }}%</p>
       <p>Visibility: {{ weatherData?.visibility / 1000 }} km</p>
@@ -62,6 +63,14 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import { notification } from 'ant-design-vue'
+
+const ShowNotifyFailed = (err) => {
+  notification.error({
+    message: 'Error',
+    description: err.message || 'Load weather data failed',
+  })
+}
 
 const weatherData = ref(null)
 
@@ -82,6 +91,7 @@ if (navigator.geolocation) {
         weatherData.value = res.data
       } catch (err) {
         console.error('Lỗi khi gọi API thời tiết:', err)
+        ShowNotifyFailed(err)
       }
     },
     (error) => {
@@ -98,3 +108,8 @@ function formatTime(unix) {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 </script>
+<style scoped>
+p {
+  margin-bottom: 12px !important;
+}
+</style>

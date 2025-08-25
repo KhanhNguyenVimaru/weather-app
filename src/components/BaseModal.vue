@@ -1,10 +1,7 @@
 <template>
   <Teleport to="body">
     <Transition name="modal-outer">
-      <div
-        v-show="modalActive"
-        class="absolute w-full h-screen top-0 left-0 flex justify-center px-8"
-      >
+      <div v-show="modalActive" class="fixed w-full h-screen top-0 left-0 flex justify-center px-8">
         <!-- Overlay -->
         <div class="absolute inset-0 bg-black opacity-30"></div>
 
@@ -18,6 +15,7 @@
             <div class="flex justify-end">
               <button
                 class="text-white mt-8 bg-blue-600 hover:bg-blue-400 cursor-pointer py-1.5 px-6 text-md rounded-sm"
+                style="color: white"
                 @click="$emit('close-modal')"
               >
                 Close

@@ -20,7 +20,13 @@
         ></i>
         <i
           class="bi bi-bookmark text-lg cursor-pointer text-black hover:text-blue-600 transition-colors duration-200"
+          @click="$router.push('/saved-cities')"
         ></i>
+        <i
+          class="bi bi-x-square text-lg cursor-pointer text-black hover:text-red-600 transition-colors duration-200"
+          @click="deleteStorage"
+        >
+        </i>
       </div>
 
       <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
@@ -61,13 +67,40 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { uid } from 'uid'
 import { ref } from 'vue'
 import BaseModal from './BaseModal.vue'
+import { notification } from 'ant-design-vue'
 
 const savedCities = ref([])
 const route = useRoute()
 const router = useRouter()
+
 const addCity = () => {
+  // load lại storage cũ
   if (localStorage.getItem('savedCities')) {
     savedCities.value = JSON.parse(localStorage.getItem('savedCities'))
+  }
+
+  const lat = route.query.lat
+  const lon = route.query.lon
+
+  // nếu lat hoặc lon không tồn tại thì báo lỗi
+  if (!lat || !lon) {
+    notification.error({
+      message: 'Lưu thất bại',
+      description: 'Không tìm thấy tọa độ (lat/lon) hợp lệ để lưu.',
+    })
+    return
+  }
+
+  // kiểm tra city trùng
+  const exists = savedCities.value.some(
+    (c) => c.city === route.params.city && c.state === route.params.state,
+  )
+  if (exists) {
+    notification.warning({
+      message: 'Thông báo',
+      description: 'Thành phố này đã có trong danh sách.',
+    })
+    return
   }
 
   const locationObj = {
@@ -75,15 +108,21 @@ const addCity = () => {
     state: route.params.state,
     city: route.params.city,
     coords: {
-      lat: route.query.lat,
-      lng: route.query.lng,
+      lat,
+      lon,
     },
   }
 
   savedCities.value.push(locationObj)
   localStorage.setItem('savedCities', JSON.stringify(savedCities.value))
 
-  let query = Object.assign({}, route.query)
+  notification.success({
+    message: 'Lưu thành công',
+    description: `Đã lưu ${route.params.city}, ${route.params.state} vào danh sách.`,
+  })
+
+  // update query trên URL
+  let query = { ...route.query }
   delete query.preview
   query.id = locationObj.id
   router.replace({ query })
@@ -92,6 +131,15 @@ const addCity = () => {
 const modalActive = ref(null)
 const toggleModal = () => {
   modalActive.value = !modalActive.value
+}
+
+const deleteStorage = () => {
+  localStorage.clear()
+  notification.info({
+    message: 'Xóa thành công',
+    description: 'Toàn bộ danh sách thành phố đã được xóa.',
+  })
+  location.reload()
 }
 </script>
 
