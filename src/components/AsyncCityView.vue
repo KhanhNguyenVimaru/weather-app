@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="weatherData"
     class="flex flex-col flex-1 items-center w-full bg-no-repeat bg-top pb-12"
     style="background-color: #283762"
   >
@@ -105,11 +106,10 @@
 
 <script setup>
 import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
 const route = useRoute()
-const router = useRouter()
 
 const weatherData = ref(null)
 const loading = ref(true)
@@ -177,10 +177,6 @@ const getWeatherData = async () => {
     errorMsg.value = error.response?.data?.message || error.message
     return null
   }
-}
-
-const removeCity = () => {
-  router.push({ name: 'HomeView' })
 }
 
 onMounted(async () => {

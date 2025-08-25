@@ -1,12 +1,15 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6" v-if="weatherData">
+  <h2 class="mt-6 ml-7 text-lg">The weather at your place</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 pt-4" v-if="weatherData">
     <!-- Card 1: Location & Weather -->
     <div
       class="bg-white text-black border-2 border-gray-300 rounded-xl p-5 transition duration-300 hover:shadow-lg hover:border-gray-500 hover:scale-105"
     >
-      <h2 class="text-lg font-bold mb-3">Location & Weather</h2>
       <p v-if="weatherData">
-        <span class="font-semibold">{{ weatherData.name }}, {{ weatherData.sys.country }}</span>
+        <span class="font-semibold text-lg"
+          >{{ weatherData.name }}, {{ weatherData.sys.country }}</span
+        >
       </p>
       <p>Main: {{ weatherData?.weather[0]?.main }}</p>
       <p>Description: {{ weatherData?.weather[0]?.description }}</p>
