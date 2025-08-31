@@ -9,7 +9,7 @@ It allows users to search and track the weather of cities.
 
 - Search for cities using Mapbox API
 - Display search suggestions in real-time
-- Save and manage favorite cities
+- Save and delete favorite cities in localstorage
 - View current weather and forecast
 
 ---
