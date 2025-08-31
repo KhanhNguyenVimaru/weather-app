@@ -3,7 +3,7 @@
     class="container mx-auto max-w-4xl min-h-[80vh]"
     style="margin-top: 30px; margin-bottom: 100px"
   >
-    <div v-for="city in savedCities" :key="city.id">
+    <div v-for="city in savedCities" :key="city.id" :id="`city-${city.id}`">
       <CityCard :city="city" @click="goToCityView(city)" />
     </div>
 

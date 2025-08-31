@@ -15,7 +15,7 @@
         v-for="(result, index) in mapboxSearchResults"
         :key="index"
         class="px-4 py-2 cursor-pointer hover:bg-gray-100 transition"
-        @click="preview(result)"
+        @click="showWeatherView(result)"
       >
         {{ result.place_name }}
       </li>
@@ -66,7 +66,7 @@ const searchQuery = ref('')
 const mapboxSearchResults = ref([])
 const router = useRouter()
 
-const preview = (search) => {
+const showWeatherView = (search) => {
   const [city, state] = search.place_name.split(',').map((s) => s.trim())
   router.push({
     name: 'CityView',

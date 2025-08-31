@@ -15,15 +15,15 @@
         ></i>
 
         <i
-          class="bi bi-plus-square text-lg cursor-pointer text-black hover:text-blue-600 transition-colors duration-200"
+          class="bi bi-bookmark-plus text-lg cursor-pointer text-black hover:text-blue-600 transition-colors duration-200"
           @click="addCity"
         ></i>
         <i
-          class="bi bi-bookmark text-lg cursor-pointer text-black hover:text-blue-600 transition-colors duration-200"
+          class="bi bi-bookmark-dash text-lg cursor-pointer text-black hover:text-blue-600 transition-colors duration-200"
           @click="$router.push('/saved-cities')"
         ></i>
         <i
-          class="bi bi-x-square text-lg cursor-pointer text-black hover:text-red-600 transition-colors duration-200"
+          class="bi bi-bookmark-x text-lg cursor-pointer text-black hover:text-red-600 transition-colors duration-200"
           @click="deleteStorage"
         >
         </i>
@@ -46,15 +46,20 @@
               selection.
             </li>
             <li class="text-gray-600">
-              Track the city by clicking on the "+" icon in the top right. This will save the city
-              to view at a later time on the home page.
+              Track the city by clicking on the <i class="bi bi-bookmark-plus"></i> icon in the top
+              right. This will save the city to view at a later time on the home page.
+            </li>
+            <li class="text-gray-600">
+              To check all cities you are tracking, click the
+              <i class="bi bi-bookmark-dash"></i> icon in the top right.
             </li>
           </ol>
 
-          <h1 class="text-md font-bold">Removing a city</h1>
+          <h1 class="text-md font-bold">Removing all cities</h1>
           <p class="text-gray-600">
-            If you no longer wish to track a city, simply select the city within the home page. At
-            the bottom of the page, there will be am option to delete the city.
+            If you wish to remove all saved cities, you can click
+            <i class="bi bi-bookmark-x"></i> to clear your browser's local storage. This will delete
+            all saved city data.
           </p>
         </div>
       </BaseModal>
@@ -68,7 +73,6 @@ import { uid } from 'uid'
 import { ref } from 'vue'
 import BaseModal from './BaseModal.vue'
 import { notification } from 'ant-design-vue'
-
 const savedCities = ref([])
 const route = useRoute()
 const router = useRouter()
@@ -85,8 +89,8 @@ const addCity = () => {
   // nếu lat hoặc lon không tồn tại thì báo lỗi
   if (!lat || !lon) {
     notification.error({
-      message: 'Lưu thất bại',
-      description: 'Không tìm thấy tọa độ (lat/lon) hợp lệ để lưu.',
+      message: 'Save failed',
+      description: 'Could not find valid coordinates (lat/lon) to save.',
     })
     return
   }
@@ -97,8 +101,8 @@ const addCity = () => {
   )
   if (exists) {
     notification.warning({
-      message: 'Thông báo',
-      description: 'Thành phố này đã có trong danh sách.',
+      message: 'Notification',
+      description: 'This city is already in the list.',
     })
     return
   }
@@ -117,8 +121,8 @@ const addCity = () => {
   localStorage.setItem('savedCities', JSON.stringify(savedCities.value))
 
   notification.success({
-    message: 'Lưu thành công',
-    description: `Đã lưu ${route.params.city}, ${route.params.state} vào danh sách.`,
+    message: 'Save successful',
+    description: `Saved ${route.params.city}, ${route.params.state} to the list.`,
   })
 
   // update query trên URL
@@ -136,11 +140,15 @@ const toggleModal = () => {
 const deleteStorage = () => {
   localStorage.clear()
   notification.info({
-    message: 'Xóa thành công',
-    description: 'Toàn bộ danh sách thành phố đã được xóa.',
+    message: 'Delete successful',
+    description: 'All city data has been deleted.',
   })
   location.reload()
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+li {
+  margin-bottom: 8px;
+}
+</style>
