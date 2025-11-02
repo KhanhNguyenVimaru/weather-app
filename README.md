@@ -27,7 +27,6 @@ It allows users to search, view, and save weather information for their favorite
 
 ## Installation and Setup
 
-### 1. Clone the repository
 
 ```bash
 git clone https://github.com/your-username/local-weather-app.git
